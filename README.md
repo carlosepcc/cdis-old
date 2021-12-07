@@ -1,9 +1,9 @@
 # CDIS
-## Gestión de Proceso de Comisión Disciplinaria
+**Gestión de Proceso de Comisión Disciplinaria**
 
 **Autores:** 
-carlosepcc 
-Zero9738
+- carlosepcc 
+- Zero9738
 
 **Tutor:**
-yluguen
+- yluguen
