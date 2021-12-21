@@ -2,8 +2,10 @@
 **Gestión de Proceso de Comisión Disciplinaria**
 
 **Autores:** 
-- carlosepcc 
+- carlosepcc
 - Zero9738
 
 **Tutor:**
 - yluguen
+
+<www.uci.cu>
