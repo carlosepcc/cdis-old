@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/Caso")
-//podemos acceder desde cualquier url
+//podemos acceder desde cualquier url.
 @CrossOrigin("*")
 public class CasoController {
 

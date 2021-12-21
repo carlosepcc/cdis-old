@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pid</groupId>
-    <artifactId>proyecto7.0</artifactId>
+    <artifactId>cdis</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>proyecto7.0</name>
+    <name>CDIS</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
