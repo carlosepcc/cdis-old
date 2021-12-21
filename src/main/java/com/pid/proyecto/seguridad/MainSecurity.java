@@ -1,5 +1,6 @@
 package com.pid.proyecto.seguridad;
 
+import com.pid.proyecto.seguridad.jwt.JwtAccessDeniedHandler;
 import com.pid.proyecto.seguridad.jwt.JwtEntryPoint;
 import com.pid.proyecto.seguridad.jwt.JwtTokenFilter;
 import com.pid.proyecto.service.UserDetailsServiceImpl;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -22,12 +24,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MainSecurity extends WebSecurityConfigurerAdapter {
 
-    
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     JwtEntryPoint jwtEntryPoint;
+    
+    @Autowired
+    JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public JwtTokenFilter jwtTokenFilter() {
@@ -66,17 +70,22 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 //para crear nuevo usuario y logearse no hay q estar autenticado
-                .antMatchers("/Usuario/crearUsuario","/Usuario/loginUsuario").permitAll() 
-                
+                .antMatchers("/Usuario/crearUsuario", "/Usuario/loginUsuario").permitAll()
                 //para todo lo demas hay q estar autenticado
+                .antMatchers("/").permitAll()
+            .antMatchers("/swagger-ui/index.html").permitAll()
+            .antMatchers("/swagger-ui/swagger-ui.css").permitAll()
+            .antMatchers("/swagger-ui/swagger-ui-bundle.js").permitAll()
+            .antMatchers("/swagger-ui/swagger-ui-standalone-preset.js").permitAll()
+            .antMatchers("/v3/api-docs").permitAll()
+            .antMatchers("/v3/api-docs/swagger-config").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint) // control de excepciones
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler) // control de excepciones
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
-    
 }

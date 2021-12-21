@@ -15,7 +15,7 @@ public class NuevoUsuario {
     @NotBlank
     private String contrasena;
     @NotBlank
-    private boolean profesor;
+    private boolean estudiante;
 
     private Set<String> roles = new HashSet<>();
 
@@ -27,7 +27,7 @@ public class NuevoUsuario {
         this.apellidos = apellidos;
         this.usuario = usuario;
         this.contrasena = contrasena;
-        this.profesor = profesor;
+        this.estudiante = profesor;
         this.roles = roles;
     }
 
@@ -71,12 +71,12 @@ public class NuevoUsuario {
         this.contrasena = contrasena;
     }
 
-    public boolean isProfesor() {
-        return profesor;
+    public boolean isEstudiante() {
+        return estudiante;
     }
 
-    public void setProfesor(boolean profesor) {
-        this.profesor = profesor;
+    public void setEstudiante(boolean estudiante) {
+        this.estudiante = estudiante;
     }
 
 }

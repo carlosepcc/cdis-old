@@ -10,4 +10,6 @@ public interface RolSistemaRepository extends JpaRepository<RolSistema, Integer>
     // buscamos el rol por el nombre del rol (rol)
     Optional<RolSistema> findByRol(RolNombre rol);
 
+    public boolean existsByRol(RolNombre rol);
+
 }

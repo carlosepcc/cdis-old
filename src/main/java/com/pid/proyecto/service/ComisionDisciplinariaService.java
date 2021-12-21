@@ -4,6 +4,7 @@ import com.pid.proyecto.entity.Comisiondisciplinaria;
 import com.pid.proyecto.entity.Usuario;
 import com.pid.proyecto.repository.ComisionDisciplinariaRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +30,14 @@ public class ComisionDisciplinariaService {
     public void delete(int id) {
 
         comisionDisciplinariaRepository.deleteByIdcomision(id);
+    }
+    
+    public boolean existsById(int id) {
+        return comisionDisciplinariaRepository.existsByIdcomision(id);
+    }
+    
+    public Optional<Comisiondisciplinaria> getByIdcomision(int id) {
+
+        return comisionDisciplinariaRepository.findByIdcomision(id);
     }
 }

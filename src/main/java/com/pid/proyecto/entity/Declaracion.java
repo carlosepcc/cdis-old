@@ -21,7 +21,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({ "casoList","usuarioList" })
 @Entity
 @Table(name = "declaracion", catalog = "PID", schema = "public")
 @NamedQueries({
@@ -48,11 +47,13 @@ public class Declaracion implements Serializable {
         @JoinColumn(name = "iddeclaracion", referencedColumnName = "iddeclaracion")}, inverseJoinColumns = {
         @JoinColumn(name = "idusuario", referencedColumnName = "idusuario")})
     @ManyToMany
+    @JsonIgnoreProperties({ "denunciaList","rolsistemaList","declaracionList","expedienteList","comdiscUsuarioList"})
     private List<Usuario> usuarioList;
     @JoinTable(name = "caso_declaracion", joinColumns = {
         @JoinColumn(name = "iddeclaracion", referencedColumnName = "iddeclaracion")}, inverseJoinColumns = {
         @JoinColumn(name = "idcaso", referencedColumnName = "idcaso")})
     @ManyToMany
+    @JsonIgnoreProperties({"comisiondisciplinariaList","expedienteList","declaracionList","iddenuncia"})
     private List<Caso> casoList;
 
     public Declaracion() {
@@ -64,6 +65,11 @@ public class Declaracion implements Serializable {
 
     public Declaracion(Integer iddeclaracion, String descripciondec, Date fecha) {
         this.iddeclaracion = iddeclaracion;
+        this.descripciondec = descripciondec;
+        this.fecha = fecha;
+    }
+
+    public Declaracion(String descripciondec, Date fecha) {
         this.descripciondec = descripciondec;
         this.fecha = fecha;
     }
@@ -132,5 +138,5 @@ public class Declaracion implements Serializable {
     public String toString() {
         return "com.pid.proyecto.entity.Declaracion[ iddeclaracion=" + iddeclaracion + " ]";
     }
-    
+
 }

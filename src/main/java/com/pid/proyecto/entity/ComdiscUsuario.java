@@ -1,5 +1,6 @@
 package com.pid.proyecto.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -29,10 +30,12 @@ public class ComdiscUsuario implements Serializable {
     private String rolcomision;
     @JoinColumn(name = "idcomision", referencedColumnName = "idcomision", insertable = false, updatable = false)
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({ "casoList","comdiscUsuarioList" })
     private Comisiondisciplinaria comisiondisciplinaria;
     @JoinColumn(name = "idusuario", referencedColumnName = "idusuario", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Usuario usuario;
+    @JsonIgnoreProperties({ "denunciaList","rolsistemaList","declaracionList","expedienteList","comdiscUsuarioList"})
+    private Usuario idusuario;
 
     public ComdiscUsuario() {
     }
@@ -74,12 +77,12 @@ public class ComdiscUsuario implements Serializable {
         this.comisiondisciplinaria = comisiondisciplinaria;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getIdusuario() {
+        return idusuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdusuario(Usuario idusuario) {
+        this.idusuario = idusuario;
     }
 
     @Override
@@ -106,5 +109,5 @@ public class ComdiscUsuario implements Serializable {
     public String toString() {
         return "com.pid.proyecto.entity.ComdiscUsuario[ comdiscUsuarioPK=" + comdiscUsuarioPK + " ]";
     }
-    
+
 }

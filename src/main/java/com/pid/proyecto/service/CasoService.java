@@ -1,8 +1,10 @@
 package com.pid.proyecto.service;
 
 import com.pid.proyecto.entity.Caso;
+import com.pid.proyecto.entity.Denuncia;
 import com.pid.proyecto.repository.CasoRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,4 +21,22 @@ public class CasoService {
         return casoRepo.findAll();
     }
     
+     // salvamos el objeto caso en la base de datos
+    public void save(Caso caso) {
+
+        casoRepo.save(caso);
+    }
+    
+    public boolean existsByIddenuncia(Denuncia iddenuncia) {
+        return casoRepo.existsByIddenuncia(iddenuncia);
+    }
+    
+    public Optional<Caso> getById(int id) {
+
+        return casoRepo.findByIdcaso(id);
+    }
+
+    public boolean existByIdcaso(int i) {
+       return casoRepo.existsByIdcaso(i);
+    }
 }

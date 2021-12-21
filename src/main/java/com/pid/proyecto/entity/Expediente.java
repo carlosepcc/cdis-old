@@ -20,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({ "casoList" })
 @Entity
 @Table(name = "expediente", catalog = "PID", schema = "public")
 @NamedQueries({
@@ -40,16 +39,23 @@ public class Expediente implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechacreacion;
     @ManyToMany(mappedBy = "expedienteList")
+    @JsonIgnoreProperties({"comisiondisciplinariaList","expedienteList","declaracionList","iddenuncia"})
     private List<Caso> casoList;
     @JoinColumn(name = "idusuario", referencedColumnName = "idusuario")
     @ManyToOne(optional = false)
-    private Usuario idusuario;
+    @JsonIgnoreProperties({ "denunciaList","rolsistemaList","declaracionList","expedienteList","comdiscUsuarioList"})
+    private Usuario usuario;
 
     public Expediente() {
     }
 
     public Expediente(Integer idexpediente) {
         this.idexpediente = idexpediente;
+    }
+
+    public Expediente(String descripcion, Date fecha) {
+        this.descripcione = descripcion;
+        this.fechacreacion = fecha;
     }
 
     public Integer getIdexpediente() {
@@ -84,12 +90,12 @@ public class Expediente implements Serializable {
         this.casoList = casoList;
     }
 
-    public Usuario getIdusuario() {
-        return idusuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdusuario(Usuario idusuario) {
-        this.idusuario = idusuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
@@ -116,5 +122,5 @@ public class Expediente implements Serializable {
     public String toString() {
         return "com.pid.proyecto.entity.Expediente[ idexpediente=" + idexpediente + " ]";
     }
-    
+
 }

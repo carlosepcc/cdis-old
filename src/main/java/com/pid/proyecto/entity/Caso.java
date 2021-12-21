@@ -21,7 +21,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-@JsonIgnoreProperties({ "declaracionList","expedienteList","comisiondisciplinariaList" })
 @Entity
 @Table(name = "caso", catalog = "PID", schema = "public")
 @NamedQueries({
@@ -50,16 +49,20 @@ public class Caso implements Serializable {
         @JoinColumn(name = "idcaso", referencedColumnName = "idcaso")}, inverseJoinColumns = {
         @JoinColumn(name = "idcomision", referencedColumnName = "idcomision")})
     @ManyToMany
+    @JsonIgnoreProperties({ "casoList","comdiscUsuarioList" })
     private List<Comisiondisciplinaria> comisiondisciplinariaList;
     @JoinTable(name = "caso_expediente", joinColumns = {
         @JoinColumn(name = "idcaso", referencedColumnName = "idcaso")}, inverseJoinColumns = {
         @JoinColumn(name = "idexpediente", referencedColumnName = "idexpediente")})
     @ManyToMany
+    @JsonIgnoreProperties({"casoList","idusuario"})
     private List<Expediente> expedienteList;
     @ManyToMany(mappedBy = "casoList")
+    @JsonIgnoreProperties({"usuarioList", "casoList"})
     private List<Declaracion> declaracionList;
     @JoinColumn(name = "iddenuncia", referencedColumnName = "iddenuncia")
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({"usuarioList","casoList"})
     private Denuncia iddenuncia;
 
     public Caso() {
@@ -71,6 +74,10 @@ public class Caso implements Serializable {
 
     public Caso(Integer idcaso, Character estado, Date fechaapertura) {
         this.idcaso = idcaso;
+        this.estado = estado;
+        this.fechaapertura = fechaapertura;
+    }
+    public Caso(Character estado, Date fechaapertura) {
         this.estado = estado;
         this.fechaapertura = fechaapertura;
     }

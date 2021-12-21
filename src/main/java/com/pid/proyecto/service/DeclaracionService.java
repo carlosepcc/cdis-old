@@ -19,4 +19,8 @@ public class DeclaracionService {
         return declaracionRepo.findAll();
     }
     
+    public void save(Declaracion declaracion) {
+
+        declaracionRepo.save(declaracion);
+    }
 }

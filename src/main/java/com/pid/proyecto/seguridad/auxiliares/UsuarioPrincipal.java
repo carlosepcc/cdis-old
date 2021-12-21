@@ -41,7 +41,7 @@ public class UsuarioPrincipal implements UserDetails {
                 usuario.getApellidos(),
                 usuario.getUsuario(),
                 usuario.getContrasena(),
-                usuario.getProfesor(),
+                usuario.getEstudiante(),
                 authoritys);
     }
 

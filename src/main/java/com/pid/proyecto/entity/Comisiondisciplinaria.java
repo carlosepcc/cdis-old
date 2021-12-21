@@ -21,7 +21,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({ "comdiscUsuarioList","casoList" })
 @Entity
 @Table(name = "comisiondisciplinaria", catalog = "PID", schema = "public")
 @NamedQueries({
@@ -45,8 +44,10 @@ public class Comisiondisciplinaria implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechacreacion;
     @ManyToMany(mappedBy = "comisiondisciplinariaList")
+    @JsonIgnoreProperties({"comisiondisciplinariaList","expedienteList","declaracionList","iddenuncia"})
     private List<Caso> casoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comisiondisciplinaria")
+    @JsonIgnoreProperties({"comisiondisciplinaria","usuario"})
     private List<ComdiscUsuario> comdiscUsuarioList;
 
     public Comisiondisciplinaria() {

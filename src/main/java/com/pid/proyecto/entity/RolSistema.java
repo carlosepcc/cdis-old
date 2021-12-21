@@ -44,6 +44,10 @@ public class RolSistema implements Serializable {
         this.rol = rol;
     }
 
+    public RolSistema(RolNombre rolNombre) {
+        this.rol=rolNombre;
+    }
+
     public Integer getIdrol() {
         return idrol;
     }

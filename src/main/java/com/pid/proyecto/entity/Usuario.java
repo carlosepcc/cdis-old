@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({ "denunciaList", "rolsistemaList", "declaracionList","expedienteList","comdiscUsuarioList" })
 @Entity
 @Table(name = "usuario", catalog = "PID", schema = "public")
 public class Usuario implements Serializable {
@@ -54,9 +53,10 @@ public class Usuario implements Serializable {
     private String contrasena;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "profesor")
-    private boolean profesor;
+    @Column(name = "estudiante")
+    private boolean estudiante;
     @ManyToMany(mappedBy = "usuarioList")
+    @JsonIgnoreProperties({"usuarioList","casoList"})
     private List<Denuncia> denunciaList;
 
     @NotNull
@@ -64,12 +64,14 @@ public class Usuario implements Serializable {
     @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<RolSistema> rolsistemaList = new HashSet<>();
-
     @ManyToMany(mappedBy = "usuarioList")
+    @JsonIgnoreProperties({"usuarioList", "casoList"})
     private List<Declaracion> declaracionList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuario")
-    private List<Expediente> expedienteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @JsonIgnoreProperties({"casoList","idusuario"})
+    private List<Expediente> expedienteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuario")
+    @JsonIgnoreProperties({"comisiondisciplinaria","usuario"})
     private List<ComdiscUsuario> comdiscUsuarioList;
 
     public Usuario() {
@@ -80,7 +82,7 @@ public class Usuario implements Serializable {
         this.apellidos = apellidos;
         this.usuario = usuario;
         this.contrasena = contrasena;
-        this.profesor = profesor;
+        this.estudiante = profesor;
     }
 
     public Integer getIdusuario() {
@@ -123,12 +125,12 @@ public class Usuario implements Serializable {
         this.contrasena = contrasena;
     }
 
-    public boolean getProfesor() {
-        return profesor;
+    public boolean getEstudiante() {
+        return estudiante;
     }
 
-    public void setProfesor(boolean profesor) {
-        this.profesor = profesor;
+    public void setEstudiante(boolean estudiante) {
+        this.estudiante = estudiante;
     }
 
     public List<Denuncia> getDenunciaList() {

@@ -21,26 +21,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/ComDiscUsuario")
 //podemos acceder desde cualquier url
 @CrossOrigin("*")
 public class ComDiscUsuarioController {
-    
+
     @Autowired
     RolSistemaService rolSistemaService;
-    
+
     @Autowired
     ComDiscUsuarioService comDiscUsuarioService;
+
     @GetMapping("/listarComDiscUsuario")
     public ResponseEntity<List<ComdiscUsuario>> list() {
         List<ComdiscUsuario> list = comDiscUsuarioService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
-    
+
     @PutMapping("/crearComDisUsuario")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') "
+            + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevoComDiscUsuario nuevoComDiscUsuario, BindingResult bindingResult) {
 
         // si tiene errores en el binding result
@@ -50,18 +51,17 @@ public class ComDiscUsuarioController {
 
 // si todo esta bien creamos la comision
         ComdiscUsuario comDiscUsuario;
-        
+
         ComdiscUsuarioPK comDiscUsuarioPK = new ComdiscUsuarioPK(nuevoComDiscUsuario.getIdComision(), nuevoComDiscUsuario.getIdComision());
-        
+
         if (nuevoComDiscUsuario.getRol().contains("jefe")) {
             comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_JEFE.toString());
-        }
-        else  {
+        } else {
             comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_INTEGRANTE.toString());
         }
-//        comDiscUsuarioService.save(comDiscUsuario);
-        
+        comDiscUsuarioService.save(comDiscUsuario);
+
         return new ResponseEntity(new Mensaje("INSTANCIA CREADA"), HttpStatus.CREATED);
     }
-   
+
 }

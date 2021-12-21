@@ -1,59 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pid.proyecto.seguridad.dto;
 
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 
+//Esta es la clase encargada de recibir los datos desde el json
 public class NuevaComision {
 
     @NotBlank
-    private String TipoComision;
+    private String tipoComision;
     @NotBlank
     private Date fecha;
     @NotBlank
-    private String usuario;
+    private List<String> usuarios;
     @NotBlank
-    private String rolComision;
+    private List<String> rolComision;
     
     
 
-    public NuevaComision(String TipoComision, Date fecha, String usuario, String rolComision) {
-        this.TipoComision = TipoComision;
-        this.fecha = fecha;
-        this.usuario = usuario;
-        this.rolComision = rolComision;
-    }
     public NuevaComision() {
     }
 
-    public String getRolComision() {
+    public List<String> getRolComision() {
         return rolComision;
     }
 
-    public void setRolComision(String rolComision) {
+    public void setRolComision(List<String> rolComision) {
         this.rolComision = rolComision;
     }
 
     
-    public String getUsuario() {
-        return usuario;
+    public List<String> getUsuarios() {
+        return usuarios;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUsuarios(List<String> usuario) {
+        this.usuarios = usuario;
     }
 
 
     public String getTipoComision() {
-        return TipoComision;
+        return tipoComision;
     }
 
     public void setTipoComision(String TipoComision) {
-        this.TipoComision = TipoComision;
+        this.tipoComision = TipoComision;
     }
 
     public Date getFecha() {

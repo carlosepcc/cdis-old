@@ -38,9 +38,7 @@ public class UsuarioService {
 
     // Comprobamos si existe el apellido (apellidos)
     public boolean existsById(int id) {
-
         return usuarioRepo.existsByIdusuario(id);
-
     }
 
     // salvamos el objeto usuario en la base de datos

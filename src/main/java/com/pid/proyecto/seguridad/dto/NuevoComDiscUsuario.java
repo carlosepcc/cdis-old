@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pid.proyecto.seguridad.dto;
 
 import javax.validation.constraints.NotBlank;
@@ -18,11 +13,6 @@ public class NuevoComDiscUsuario {
     @NotBlank
     private String rol;
 
-    public NuevoComDiscUsuario(int idComision, int idUsuario, String rol) {
-        this.idComision = idComision;
-        this.idUsuario = idUsuario;
-        this.rol = rol;
-    }
 
     public NuevoComDiscUsuario() {
 

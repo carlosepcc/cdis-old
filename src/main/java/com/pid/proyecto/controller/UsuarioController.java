@@ -63,7 +63,10 @@ public class UsuarioController {
     }
 
     @PutMapping("/crearUsuario")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') "
+            + "or hasRole('ROLE_DECANO')"
+            + "or hasRole('ROLE_TRABAJADOR')"
+            + "or hasRole('ROLE_PROFESOR')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult) {
 
         // si tiene errores en el binding result
@@ -75,27 +78,41 @@ public class UsuarioController {
             return new ResponseEntity<>(new Mensaje("ESE USUARIO YA EXISTE"), HttpStatus.BAD_REQUEST);
         }
 
-// si todo esta bien creamos el usuario
-        Usuario usuario;
-        usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getApellidos(),
-                nuevoUsuario.getUsuario(), passwordEncoder.encode(nuevoUsuario.getContrasena()), nuevoUsuario.isProfesor());
-
         Set<RolSistema> roles = new HashSet<>();
-
+        boolean estudiante = false;
         roles.add(rolSistemaService.getByRol(RolNombre.ROLE_USER).get());
 
         // si el usuario creado posee el rol admin en el jason lo creamos asi
         if (nuevoUsuario.getRoles().contains("admin")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
+        }
+        if (nuevoUsuario.getRoles().contains("decano")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
+        }
+        if (nuevoUsuario.isEstudiante() || nuevoUsuario.getRoles().contains("estudiante")) {
+            estudiante = true;
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ESTUDIANTE).get());
 
         }
+        if (nuevoUsuario.getRoles().contains("profesor")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_PROFESOR).get());
+        }
+        if (nuevoUsuario.getRoles().contains("trabajador")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_TRABAJADOR).get());
+        }
+
+// si todo esta bien creamos el usuario
+        Usuario usuario;
+        usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getApellidos(),
+                nuevoUsuario.getUsuario(), passwordEncoder.encode(nuevoUsuario.getContrasena()), estudiante);
+
         usuario.setRolsistemaList(roles);
         usuarioService.save(usuario);
         return new ResponseEntity(new Mensaje("USUARIO GUARDADO"), HttpStatus.CREATED);
     }
 
     @PutMapping("/actualizarUsuario/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> actualizar(@PathVariable("id") int id, @RequestBody NuevoUsuario nuevoUsuario) {
 
         // si todo esta bien creamos el usuario
@@ -104,7 +121,7 @@ public class UsuarioController {
         usuario.setApellidos(nuevoUsuario.getApellidos());
         usuario.setUsuario(nuevoUsuario.getUsuario());
         usuario.setContrasena(passwordEncoder.encode(nuevoUsuario.getContrasena()));
-        usuario.setProfesor(nuevoUsuario.isProfesor());
+        usuario.setEstudiante(nuevoUsuario.isEstudiante());
 
         Set<RolSistema> roles = new HashSet<>();
 
@@ -113,7 +130,9 @@ public class UsuarioController {
         // si el usuario creado posee el rol admin en el jason lo creamos asi
         if (nuevoUsuario.getRoles().contains("admin")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
-
+        }
+        if (nuevoUsuario.getRoles().contains("decano")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
         }
         usuario.setRolsistemaList(roles);
         usuarioService.save(usuario);

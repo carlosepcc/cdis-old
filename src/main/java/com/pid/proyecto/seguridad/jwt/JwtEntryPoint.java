@@ -6,13 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 // Esta clase va a comprobar si hay un token valido
 @Component
-public class JwtEntryPoint implements AuthenticationEntryPoint {
+public class JwtEntryPoint implements AuthenticationEntryPoint{
 
     //para verificar errores mientras se programa
     private final static Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
@@ -23,5 +24,4 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
         logger.error("FALLO EN EL METODO COMMENCE");
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "NO AUTORIZADO");
     }
-
 }

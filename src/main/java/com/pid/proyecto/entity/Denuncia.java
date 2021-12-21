@@ -23,7 +23,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({ "casoList","usuarioList" })
 @Entity
 @Table(name = "denuncia", catalog = "PID", schema = "public")
 @NamedQueries({
@@ -44,12 +43,16 @@ public class Denuncia implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
+    
+    
     @JoinTable(name = "denuncia_usuario", joinColumns = {
         @JoinColumn(name = "iddenuncia", referencedColumnName = "iddenuncia")}, inverseJoinColumns = {
         @JoinColumn(name = "idusuario", referencedColumnName = "idusuario")})
     @ManyToMany
+    @JsonIgnoreProperties({ "denunciaList","rolsistemaList","declaracionList","expedienteList","comdiscUsuarioList"})
     private List<Usuario> usuarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "iddenuncia")
+    @JsonIgnoreProperties({"comisiondisciplinariaList","expedienteList","declaracionList","iddenuncia"})
     private List<Caso> casoList;
 
     public Denuncia() {
@@ -61,6 +64,10 @@ public class Denuncia implements Serializable {
 
     public Denuncia(Integer iddenuncia, Date fecha) {
         this.iddenuncia = iddenuncia;
+        this.fecha = fecha;
+    }
+    public Denuncia(String descripcion, Date fecha) {
+        this.descripcionden = descripcion;
         this.fecha = fecha;
     }
 
