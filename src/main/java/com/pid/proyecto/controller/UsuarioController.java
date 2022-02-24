@@ -55,7 +55,7 @@ public class UsuarioController {
 
     @Autowired
     JwtProvider jwtProvider;
-// master
+// v1
     @GetMapping()
     public ResponseEntity<List<Usuario>> list() {
         List<Usuario> list = usuarioService.Listar();
