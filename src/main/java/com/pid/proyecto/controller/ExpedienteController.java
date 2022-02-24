@@ -55,13 +55,13 @@ public class ExpedienteController {
     @Autowired
     Filtrador filtrador;
 
-    @GetMapping("/listarExpediente")
+    @GetMapping()
     public ResponseEntity<List<Expediente>> list() {
         List<Expediente> list = expedienteService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearExpediente")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevoExpediente nuevoExpediente, BindingResult bindingResult) {

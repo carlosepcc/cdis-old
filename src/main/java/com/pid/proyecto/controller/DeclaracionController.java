@@ -48,13 +48,13 @@ public class DeclaracionController {
     @Autowired
     CasoService casoService;
 
-    @GetMapping("/listarDeclaracion")
+    @GetMapping()
     public ResponseEntity<List<Declaracion>> list() {
         List<Declaracion> list = declaracionService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearDeclaracion")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_ESTUDIANTE')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevaDeclaracion nuevaDeclaracion, BindingResult bindingResult) {

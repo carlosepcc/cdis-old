@@ -47,13 +47,13 @@ public class DenunciaController {
     @Autowired
     Filtrador filtrador;
 
-    @GetMapping("/listarDenuncia")
+    @GetMapping()
     public ResponseEntity<List<Denuncia>> list() {
         List<Denuncia> list = denunciaService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearDenuncia")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')"
             + " or hasRole('ROLE_TRABAJADOR')"
             + " or hasRole('ROLE_DECANO')"

@@ -56,13 +56,13 @@ public class UsuarioController {
     @Autowired
     JwtProvider jwtProvider;
 
-    @GetMapping("/listarUsuario")
+    @GetMapping()
     public ResponseEntity<List<Usuario>> list() {
         List<Usuario> list = usuarioService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearUsuario")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')"
             + "or hasRole('ROLE_TRABAJADOR')"
@@ -139,7 +139,7 @@ public class UsuarioController {
         return new ResponseEntity(new Mensaje("USUARIO actualizado"), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/borrarUsuario/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> borrar(@PathVariable("id") int id) {
 
@@ -151,7 +151,7 @@ public class UsuarioController {
         return new ResponseEntity(new Mensaje("USUARIO BORRADO"), HttpStatus.OK);
     }
 
-    @PostMapping("/loginUsuario")
+    @PostMapping()
     public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

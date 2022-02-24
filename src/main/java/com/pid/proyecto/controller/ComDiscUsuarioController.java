@@ -33,13 +33,13 @@ public class ComDiscUsuarioController {
     @Autowired
     ComDiscUsuarioService comDiscUsuarioService;
 
-    @GetMapping("/listarComDiscUsuario")
+    @GetMapping()
     public ResponseEntity<List<ComdiscUsuario>> list() {
         List<ComdiscUsuario> list = comDiscUsuarioService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearComDisUsuario")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevoComDiscUsuario nuevoComDiscUsuario, BindingResult bindingResult) {

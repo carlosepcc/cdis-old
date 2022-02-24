@@ -39,13 +39,13 @@ public class CasoController {
     @Autowired
     DenunciaService denunciaService;
 
-    @GetMapping("/listarCaso")
+    @GetMapping()
     public ResponseEntity<List<Caso>> list() {
         List<Caso> list = casoService.Listar();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearCaso")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevoCaso nuevoCaso, BindingResult bindingResult) {

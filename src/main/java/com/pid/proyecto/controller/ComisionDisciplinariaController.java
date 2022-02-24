@@ -52,7 +52,7 @@ public class ComisionDisciplinariaController {
     @Autowired
     ComDiscUsuarioService comDiscUsuarioService;
 
-    @GetMapping("/listarComision")
+    @GetMapping()
 @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<List<Comisiondisciplinaria>> list() {
@@ -60,7 +60,7 @@ public class ComisionDisciplinariaController {
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping("/crearComision")
+    @PutMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DECANO')")
     public ResponseEntity<?> crear(@Valid @RequestBody NuevaComision nuevaComision, BindingResult bindingResult) {
         // si tiene errores en el binding result
