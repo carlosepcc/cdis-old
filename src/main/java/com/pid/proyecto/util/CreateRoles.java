@@ -1,8 +1,10 @@
 package com.pid.proyecto.util;
 
 import com.pid.proyecto.entity.RolSistema;
+import com.pid.proyecto.entity.Usuario;
 import com.pid.proyecto.seguridad.enums.RolNombre;
 import com.pid.proyecto.service.RolSistemaService;
+import com.pid.proyecto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,9 @@ public class CreateRoles implements CommandLineRunner {
 
     @Autowired
     RolSistemaService rolSistemaService;
+    
+    @Autowired
+    UsuarioService usuarioService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -45,6 +50,7 @@ public class CreateRoles implements CommandLineRunner {
         RolSistema rolJefe = new RolSistema(RolNombre.ROLE_JEFE);
 
         
+        Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", "admin", "admin", false);
         
 
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_ADMIN)) {
@@ -73,7 +79,11 @@ public class CreateRoles implements CommandLineRunner {
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_ESTUDIANTE)) {
             rolSistemaService.save(rolEstudiante);
         }
-
+        // CREAMOS UN ADMINISTRADOR POR DEFECTO SI LA BASE DE DATOS ESTA VACÍA
+        if (!usuarioService.existsById(1)) {
+            usuarioService.save(usuario);
+        }
+        
     }
 
 }

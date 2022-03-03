@@ -62,7 +62,7 @@ public class UsuarioController {
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @PutMapping()
+    @PutMapping("/crearUsuario")
     @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')"
             + "or hasRole('ROLE_TRABAJADOR')"
@@ -151,7 +151,7 @@ public class UsuarioController {
         return new ResponseEntity(new Mensaje("USUARIO BORRADO"), HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("/loginUsuario")
     public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -167,4 +167,9 @@ public class UsuarioController {
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
 
+    @GetMapping("/pass/{id}")
+    public String list(@PathVariable("id") int id ) {
+        
+        return usuarioService.getByIdusuario(id).get().getContrasena();
+    }
 }
