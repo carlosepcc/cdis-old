@@ -56,6 +56,7 @@ public class UsuarioController {
     @Autowired
     JwtProvider jwtProvider;
 // v1
+
     @GetMapping()
     public ResponseEntity<List<Usuario>> list() {
         List<Usuario> list = usuarioService.Listar();
@@ -139,16 +140,20 @@ public class UsuarioController {
         return new ResponseEntity(new Mensaje("USUARIO actualizado"), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{ids}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> borrar(@PathVariable("id") int id) {
+    public ResponseEntity<?> borrar(@PathVariable("ids") List<Integer> ids) {
 
-        if (!usuarioService.existsById(id)) {
-            return new ResponseEntity(new Mensaje("NO EXISTE"), HttpStatus.NOT_FOUND);
+        for (int i = 0; i < ids.size(); i++) {
+            if (!usuarioService.existsById(ids.get(i))) {
+                return new ResponseEntity(new Mensaje("NO EXISTE ALGUNO DE LOS ID ESPECIFICADOS"), HttpStatus.NOT_FOUND);
+            }
         }
-
-        usuarioService.delete(id);
-        return new ResponseEntity(new Mensaje("USUARIO BORRADO"), HttpStatus.OK);
+        for (int i = 0; i < ids.size(); i++) {
+            usuarioService.delete(ids.get(i));
+        }
+        
+        return new ResponseEntity(new Mensaje("USUARIOS BORRADOS"), HttpStatus.OK);
     }
 
     @PostMapping("/loginUsuario")
@@ -168,8 +173,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/pass/{id}")
-    public String list(@PathVariable("id") int id ) {
-        
+    public String list(@PathVariable("id") int id) {
+
         return usuarioService.getByIdusuario(id).get().getContrasena();
     }
 }
