@@ -171,10 +171,4 @@ public class UsuarioController {
         JwtDto jwtDto = new JwtDto(jwt); //CONSTRUIMOS EL TOKEN
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
-
-    @GetMapping("/pass/{id}")
-    public String list(@PathVariable("id") int id) {
-
-        return usuarioService.getByIdusuario(id).get().getContrasena();
-    }
 }
