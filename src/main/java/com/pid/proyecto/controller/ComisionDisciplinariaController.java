@@ -106,6 +106,11 @@ public class ComisionDisciplinariaController {
 
             comDiscUsuarioPK = new ComdiscUsuarioPK(idComision, idUsuarios.get(i));
 
+            if (!nuevaComision.getRolComision().get(i).contains("presidente") && !nuevaComision.getRolComision().get(i).contains("secretario") && !nuevaComision.getRolComision().get(i).contains("integrante")) {
+                ComisionDisciplinariaService.delete(comisionDisciplinaria.getIdcomision());
+                return new ResponseEntity<>(new Mensaje("INTRODUJO UN ROL NO VÁLIDO"), HttpStatus.BAD_REQUEST);
+            }
+
             if (nuevaComision.getRolComision().get(i).contains("presidente")) {
 
                 if (presidente == true) {
