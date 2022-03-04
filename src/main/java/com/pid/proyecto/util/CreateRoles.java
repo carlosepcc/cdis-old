@@ -55,7 +55,7 @@ public class CreateRoles implements CommandLineRunner {
         RolSistema rolSecretario = new RolSistema(RolNombre.ROLE_SECRETARIO);
 
         
-        Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", passwordEncoder.encode("admin"), "admin", false);
+        Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", "admin", passwordEncoder.encode("admin"), false);
         
 
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_ADMIN)) {
