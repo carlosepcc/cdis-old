@@ -5,6 +5,8 @@ import com.pid.proyecto.entity.Usuario;
 import com.pid.proyecto.seguridad.enums.RolNombre;
 import com.pid.proyecto.service.RolSistemaService;
 import com.pid.proyecto.service.UsuarioService;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,9 +56,10 @@ public class CreateRoles implements CommandLineRunner {
         RolSistema rolPresidente = new RolSistema(RolNombre.ROLE_PRESIDENTE);
         RolSistema rolSecretario = new RolSistema(RolNombre.ROLE_SECRETARIO);
 
-        
+        Set<RolSistema> roles = new HashSet<>();
+        roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
         Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", "admin", passwordEncoder.encode("admin"), false);
-        
+        usuario.setRolsistemaList(roles);
 
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_ADMIN)) {
             rolSistemaService.save(rolAdmin);
