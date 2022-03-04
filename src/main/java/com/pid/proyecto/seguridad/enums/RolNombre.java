@@ -7,7 +7,8 @@ public enum RolNombre {
     ROLE_USER, // rol del sistema
 
     ROLE_INTEGRANTE, // rol en la comision
-    ROLE_JEFE, // rol en la comision
+    ROLE_PRESIDENTE, // rol en la comision
+    ROLE_SECRETARIO, // rol en la comision
 
     ROLE_DECANO, // rol de la escuela
     ROLE_PROFESOR, // rol de la escuela

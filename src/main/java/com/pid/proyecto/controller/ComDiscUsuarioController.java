@@ -50,14 +50,16 @@ public class ComDiscUsuarioController {
         }
 
 // si todo esta bien creamos la comision
-        ComdiscUsuario comDiscUsuario;
+        ComdiscUsuario comDiscUsuario = null;
 
         ComdiscUsuarioPK comDiscUsuarioPK = new ComdiscUsuarioPK(nuevoComDiscUsuario.getIdComision(), nuevoComDiscUsuario.getIdComision());
 
-        if (nuevoComDiscUsuario.getRol().contains("jefe")) {
-            comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_JEFE.toString());
-        } else {
+        if (nuevoComDiscUsuario.getRol().contains("presidente")) {
+            comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_PRESIDENTE.toString());
+        } else if (nuevoComDiscUsuario.getRol().contains("integrante")) {
             comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_INTEGRANTE.toString());
+        } else if (nuevoComDiscUsuario.getRol().contains("secretario")) {
+            comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_SECRETARIO.toString());
         }
         comDiscUsuarioService.save(comDiscUsuario);
 

@@ -7,12 +7,16 @@ import com.pid.proyecto.service.RolSistemaService;
 import com.pid.proyecto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 //esta clase solo la usamos para crear los roles, luego hay que mantenerla comentada
 @Component
 public class CreateRoles implements CommandLineRunner {
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    
     @Autowired
     RolSistemaService rolSistemaService;
     
@@ -47,10 +51,11 @@ public class CreateRoles implements CommandLineRunner {
         RolSistema rolUser = new RolSistema(RolNombre.ROLE_USER);
 
         RolSistema rolIntegrante = new RolSistema(RolNombre.ROLE_INTEGRANTE);
-        RolSistema rolJefe = new RolSistema(RolNombre.ROLE_JEFE);
+        RolSistema rolPresidente = new RolSistema(RolNombre.ROLE_PRESIDENTE);
+        RolSistema rolSecretario = new RolSistema(RolNombre.ROLE_SECRETARIO);
 
         
-        Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", "admin", "admin", false);
+        Usuario usuario = new Usuario("nombreadmin", "apellidosadmin", passwordEncoder.encode("admin"), "admin", false);
         
 
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_ADMIN)) {
@@ -63,8 +68,11 @@ public class CreateRoles implements CommandLineRunner {
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_INTEGRANTE)) {
             rolSistemaService.save(rolIntegrante);
         }
-        if (!rolSistemaService.existsByRol(RolNombre.ROLE_JEFE)) {
-            rolSistemaService.save(rolJefe);
+        if (!rolSistemaService.existsByRol(RolNombre.ROLE_PRESIDENTE)) {
+            rolSistemaService.save(rolPresidente);
+        }
+        if (!rolSistemaService.existsByRol(RolNombre.ROLE_SECRETARIO)) {
+            rolSistemaService.save(rolSecretario);
         }
 
         if (!rolSistemaService.existsByRol(RolNombre.ROLE_DECANO)) {

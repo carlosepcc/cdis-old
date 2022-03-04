@@ -53,7 +53,7 @@ public class ComisionDisciplinariaController {
     ComDiscUsuarioService comDiscUsuarioService;
 
     @GetMapping()
-@PreAuthorize("hasRole('ROLE_ADMIN') "
+    @PreAuthorize("hasRole('ROLE_ADMIN') "
             + "or hasRole('ROLE_DECANO')")
     public ResponseEntity<List<Comisiondisciplinaria>> list() {
         List<Comisiondisciplinaria> list = ComisionDisciplinariaService.Listar();
@@ -73,8 +73,10 @@ public class ComisionDisciplinariaController {
         List<Usuario> usuarios;
         List<String> rolComision;
         List<ComdiscUsuario> comdiscUsuarios = new LinkedList<>();
-        ComdiscUsuario comDiscUsuario;
+        ComdiscUsuario comDiscUsuario = null;
         ComdiscUsuarioPK comDiscUsuarioPK;
+        boolean presidente = false;
+        boolean secretario = false;
 
         // si todo esta bien creamos la comision
         Comisiondisciplinaria comisionDisciplinaria
@@ -104,8 +106,28 @@ public class ComisionDisciplinariaController {
 
             comDiscUsuarioPK = new ComdiscUsuarioPK(idComision, idUsuarios.get(i));
 
-            if (nuevaComision.getRolComision().get(i).contains("jefe")) {
-                comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_JEFE.toString());
+            if (nuevaComision.getRolComision().get(i).contains("presidente")) {
+
+                if (presidente == true) {
+                    ComisionDisciplinariaService.delete(comisionDisciplinaria.getIdcomision());
+                    return new ResponseEntity<>(new Mensaje("SOLO PUEDE HABER UN PRESIDENTE, VUELVA A CREAR LA COMISION"), HttpStatus.BAD_REQUEST);
+                }
+
+                if (presidente == false) {
+                    comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_PRESIDENTE.toString());
+                    presidente = true;
+                }
+            } else if (nuevaComision.getRolComision().get(i).contains("secretario")) {
+
+                if (secretario == true) {
+                    ComisionDisciplinariaService.delete(comisionDisciplinaria.getIdcomision());
+                    return new ResponseEntity<>(new Mensaje("SOLO PUEDE HABER UN SECRETARIO, VUELVA A CREAR LA COMISION"), HttpStatus.BAD_REQUEST);
+                }
+
+                if (secretario == false) {
+                    comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_SECRETARIO.toString());
+                    secretario = true;
+                }
             } else if (nuevaComision.getRolComision().get(i).contains("integrante")) {
                 comDiscUsuario = new ComdiscUsuario(comDiscUsuarioPK, RolNombre.ROLE_INTEGRANTE.toString());
             } else {
@@ -113,6 +135,11 @@ public class ComisionDisciplinariaController {
                 return new ResponseEntity<>(new Mensaje("ERROR AL DEFINIR LOS ROLES, VUELVA A CREAR LA COMISION"), HttpStatus.BAD_REQUEST);
             }
             comdiscUsuarios.add(comDiscUsuario);
+        }
+
+        if (presidente == false || secretario == false) {
+            ComisionDisciplinariaService.delete(comisionDisciplinaria.getIdcomision());
+            return new ResponseEntity<>(new Mensaje("DEBE EXISTIR 1 PRESIDENTE Y 1 SECRETARIO EN SU COMISIÓN, VUELVA A CREAR LA COMISION"), HttpStatus.BAD_REQUEST);
         }
 
         comDiscUsuarioService.saveAll(comdiscUsuarios);
