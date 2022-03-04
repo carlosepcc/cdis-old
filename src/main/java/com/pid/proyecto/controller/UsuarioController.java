@@ -137,7 +137,7 @@ public class UsuarioController {
         }
         usuario.setRolsistemaList(roles);
         usuarioService.save(usuario);
-        return new ResponseEntity(new Mensaje("USUARIO actualizado"), HttpStatus.CREATED);
+        return new ResponseEntity(new Mensaje("USUARIO ACTUALIZADO"), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{ids}")
