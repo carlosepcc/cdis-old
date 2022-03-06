@@ -8,8 +8,6 @@ public class NuevaDeclaracion {
     @NotBlank
     private String descripcion;
     @NotBlank
-    private Date fecha;
-    @NotBlank
     private String estudiante;
     @NotBlank
     private int idCaso;
@@ -39,14 +37,6 @@ public class NuevaDeclaracion {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
 }
