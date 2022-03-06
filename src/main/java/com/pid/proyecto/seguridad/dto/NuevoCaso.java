@@ -8,9 +8,6 @@ public class NuevoCaso {
     @NotBlank
     private char estado;
     @NotBlank
-    private Date fechaApertura;
-    private Date fechaCierre;
-    @NotBlank
     private int idDenuncia;
     @NotBlank
     private int idComision;
@@ -22,10 +19,6 @@ public class NuevoCaso {
     }
 
     public NuevoCaso() {
-    }
-
-    public NuevoCaso(Date fechaCierre) {
-        this.fechaCierre = new Date();
     }
 
     public int getIdComision() {
@@ -51,21 +44,4 @@ public class NuevoCaso {
     public void setEstado(char estado) {
         this.estado = estado;
     }
-
-    public Date getFechaApertura() {
-        return fechaApertura;
-    }
-
-    public void setFechaApertura(Date fechaApertura) {
-        this.fechaApertura = fechaApertura;
-    }
-
-    public Date getFechaCierre() {
-        return fechaCierre;
-    }
-
-    public void setFechaCierre(Date fechaCierre) {
-        this.fechaCierre = fechaCierre;
-    }
-
 }

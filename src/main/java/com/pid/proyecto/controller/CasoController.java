@@ -7,7 +7,6 @@ import com.pid.proyecto.seguridad.dto.NuevoCaso;
 import com.pid.proyecto.service.CasoService;
 import com.pid.proyecto.service.ComisionDisciplinariaService;
 import com.pid.proyecto.service.DenunciaService;
-import static java.util.Collections.list;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,8 +72,12 @@ public class CasoController {
         }
 
 // si todo esta bien creamos el caso
-        Caso caso;
-        caso = new Caso(nuevoCaso.getEstado(), new Date());
+        Caso caso = new Caso();
+        if (nuevoCaso.getEstado() == 'c') {
+            return new ResponseEntity(new Mensaje("USTED NO PUEDE CREAR UN CASO EN ESTADO CERRADO"), HttpStatus.BAD_REQUEST);
+        } else {
+            caso = new Caso(nuevoCaso.getEstado(), new Date());
+        }
         caso.setIddenuncia(denunciaService.getByIddenuncia(nuevoCaso.getIdDenuncia()).get());
 
         List<Comisiondisciplinaria> Lc = new LinkedList<>();
@@ -83,4 +87,22 @@ public class CasoController {
         casoService.save(caso);
         return new ResponseEntity(new Mensaje("CASO GUARDADO"), HttpStatus.CREATED);
     }
+
+    @PutMapping("/actualizarCaso/{id}")
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> actualizar(@PathVariable("id") int id, @RequestBody NuevoCaso nuevoCaso) {
+
+        // si todo esta bien creamos el usuario
+        Caso caso = casoService.getById(id).get();
+        caso.setEstado(nuevoCaso.getEstado());
+
+        if (nuevoCaso.getEstado() == 'c') {
+            caso.setFechacierre(new Date());
+            caso.setEstado(nuevoCaso.getEstado());
+        }
+
+        casoService.save(caso);
+        return new ResponseEntity(new Mensaje("CASO ACTUALIZADO"), HttpStatus.CREATED);
+    }
+
 }
