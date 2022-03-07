@@ -53,7 +53,6 @@ public class CasoController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new Mensaje("CAMPOS MAL PUESTOS"), HttpStatus.BAD_REQUEST);
         }
-
         // limita lo que el usuario escribe en el json para el estado a las letras a | c
         if (!((nuevoCaso.getEstado() == 'a') || (nuevoCaso.getEstado() == 'c'))) {
             return new ResponseEntity(new Mensaje("LOS ESTADOS ADMITIDOS SOLO DEBEN CONTENER UNA LETRA a | c"), HttpStatus.BAD_REQUEST);

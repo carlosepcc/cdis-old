@@ -8,8 +8,6 @@ public class NuevaDenuncia {
 
     private String descripcion;
     @NotBlank
-    private String denunciante;
-    @NotBlank
     private List<String> estudiantes;
 
     public NuevaDenuncia() {
@@ -21,14 +19,6 @@ public class NuevaDenuncia {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getDenunciante() {
-        return denunciante;
-    }
-
-    public void setDenunciante(String denunciante) {
-        this.denunciante = denunciante;
     }
 
     public List<String> getEstudiantes() {

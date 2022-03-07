@@ -6,6 +6,7 @@ import com.pid.proyecto.seguridad.dto.LoginUsuario;
 import com.pid.proyecto.seguridad.dto.NuevoUsuario;
 import com.pid.proyecto.entity.RolSistema;
 import com.pid.proyecto.entity.Usuario;
+import com.pid.proyecto.seguridad.auxiliares.SesionDetails;
 import com.pid.proyecto.seguridad.enums.RolNombre;
 import com.pid.proyecto.seguridad.jwt.JwtProvider;
 import com.pid.proyecto.service.RolSistemaService;
@@ -55,7 +56,9 @@ public class UsuarioController {
 
     @Autowired
     JwtProvider jwtProvider;
-// v1
+
+    @Autowired
+    SesionDetails sesionDetails;
 
     @GetMapping()
     public ResponseEntity<List<Usuario>> list() {
@@ -74,6 +77,7 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new Mensaje("CAMPOS MAL PUESTOS"), HttpStatus.BAD_REQUEST);
         }
+        
         // si ya existe el usuario
         if (usuarioService.existsByUsuario(nuevoUsuario.getUsuario())) {
             return new ResponseEntity<>(new Mensaje("ESE USUARIO YA EXISTE"), HttpStatus.BAD_REQUEST);
@@ -81,11 +85,15 @@ public class UsuarioController {
 
         Set<RolSistema> roles = new HashSet<>();
         boolean estudiante = false;
+        
         roles.add(rolSistemaService.getByRol(RolNombre.ROLE_USER).get());
 
         // si el usuario creado posee el rol admin en el jason lo creamos asi
-        if (nuevoUsuario.getRoles().contains("admin")) {
+        if (nuevoUsuario.getRoles().contains("admin") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
+        }
+        if (nuevoUsuario.getRoles().contains("admin") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO ADMINISTRADOR"), HttpStatus.BAD_REQUEST);
         }
         if (nuevoUsuario.getRoles().contains("decano")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
@@ -129,8 +137,11 @@ public class UsuarioController {
         roles.add(rolSistemaService.getByRol(RolNombre.ROLE_USER).get());
 
         // si el usuario creado posee el rol admin en el jason lo creamos asi
-        if (nuevoUsuario.getRoles().contains("admin")) {
+        if (nuevoUsuario.getRoles().contains("admin") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
+        }
+        if (nuevoUsuario.getRoles().contains("admin") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO ADMINISTRADOR"), HttpStatus.BAD_REQUEST);
         }
         if (nuevoUsuario.getRoles().contains("decano")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
@@ -152,7 +163,7 @@ public class UsuarioController {
         for (int i = 0; i < ids.size(); i++) {
             usuarioService.delete(ids.get(i));
         }
-        
+
         return new ResponseEntity(new Mensaje("USUARIOS BORRADOS"), HttpStatus.OK);
     }
 

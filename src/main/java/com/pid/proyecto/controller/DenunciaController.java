@@ -65,21 +65,13 @@ public class DenunciaController {
             return new ResponseEntity<>(new Mensaje("CAMPOS MAL PUESTOS"), HttpStatus.BAD_REQUEST);
         }
         
-        // obtenemos del json el usuario del denunciante
-        String denunciante = nuevaDenuncia.getDenunciante();
-        // obtenemos el usuario que se encuentra ahora en sesion
-        String usuario = sesionDetails.getUsuario();
-
-        // verificamos que el valor introducido en el json para 
-        // el denunciante exista en nuestra base de datos
-        if (!usuarioService.existsByUsuario(denunciante)) {
-            return new ResponseEntity<>(new Mensaje("ESE DENUNCIANTE NO EXISTE"), HttpStatus.BAD_REQUEST);
-        }
+        // obtenemos el denunciante que se encuentra ahora en sesion
+        String denunciante = sesionDetails.getUsuario();
 
         // verificamos que los valores introducidos en el json para 
         // los estudiantes existan en nuestra base de datos
         if (convertidor.convertirListaStringToListaUsuario(nuevaDenuncia.getEstudiantes()) == null) {
-            return new ResponseEntity<>(new Mensaje("USUARIOS INCORRECTOS EN LOS ESTUDIANTES"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Mensaje("REGISTRE ANTES A TODOS LOS ESTUDIANTES"), HttpStatus.BAD_REQUEST);
         }
 
         // verificamos que la lista sea solo de usuarios estudiantes
@@ -92,32 +84,20 @@ public class DenunciaController {
         rolDenunciante = new LinkedList<>();
         rolDenunciante.addAll(usuarioService.getByUsuario(denunciante).get().getRolsistemaList());
 
-        // si el usuario introducido en el json no coincide con el que esta en sesion
-        if (!denunciante.equals(usuario)) {
-            boolean isAdmin = false;
-            if (sesionDetails.getPrivilegios().contains("ROLE_ADMIN") || sesionDetails.getPrivilegios().contains("ROLE_DECANO")) {
-                isAdmin = true;
-            }
-            // si no es decano o admin pues no podra hacer denuncias a nombre de nadie mas
-            if (isAdmin == false) {
-                return new ResponseEntity<>(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA REALIZAR UNA DENUNCIA CON UN USUARIO AJENO"), HttpStatus.BAD_REQUEST);
-            }
-        }
         // creamos la denuncia parcialmente
         Denuncia denuncia = new Denuncia(nuevaDenuncia.getDescripcion(), new Date());
 
         // preparamos la lista de relaciones de nuestra denuncia con los usuarios
-        List<Usuario> u = new LinkedList<>();
+        List<Usuario> LU = new LinkedList<>();
 
         // añadimos el objeto usuario de nuestro denunciante a la relacion con esta denuncia 
-        // pues ya sabemos que existe dicho usuario
-        u.add(usuarioService.getByUsuario(denunciante).get());
+        LU.add(usuarioService.getByUsuario(denunciante).get());
 
         // añadimos la lista de estudiantes a nuestra variable que ya tiene el denunciante
-        u.addAll(convertidor.convertirListaStringToListaUsuario(nuevaDenuncia.getEstudiantes()));
+        LU.addAll(convertidor.convertirListaStringToListaUsuario(nuevaDenuncia.getEstudiantes()));
 
         // añadimos la lista con todas nuestras relaciones a la denuncia que se está creando
-        denuncia.setUsuarioList(u);
+        denuncia.setUsuarioList(LU);
 
         // salvamos la denuncia
         denunciaService.save(denuncia);
