@@ -98,9 +98,8 @@ public class CasoController {
 
         if (nuevoCaso.getEstado() == 'c') {
             caso.setFechacierre(new Date());
-            caso.setEstado(nuevoCaso.getEstado());
         }
-
+        caso.setEstado(nuevoCaso.getEstado());
         casoService.save(caso);
         return new ResponseEntity(new Mensaje("CASO ACTUALIZADO"), HttpStatus.CREATED);
     }
