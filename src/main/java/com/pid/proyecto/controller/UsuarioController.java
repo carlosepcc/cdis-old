@@ -77,7 +77,7 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new Mensaje("CAMPOS MAL PUESTOS"), HttpStatus.BAD_REQUEST);
         }
-        
+
         // si ya existe el usuario
         if (usuarioService.existsByUsuario(nuevoUsuario.getUsuario())) {
             return new ResponseEntity<>(new Mensaje("ESE USUARIO YA EXISTE"), HttpStatus.BAD_REQUEST);
@@ -85,29 +85,38 @@ public class UsuarioController {
 
         Set<RolSistema> roles = new HashSet<>();
         boolean estudiante = false;
-        
+
         roles.add(rolSistemaService.getByRol(RolNombre.ROLE_USER).get());
 
-        // si el usuario creado posee el rol admin en el jason lo creamos asi
+        // VERIFICAMOS QUE SOLO SE PUEDAN CREAR ESTUDIANTES LIBREMENTE Y LOS ADMINISTRADORES SON LOS QUE CREAN LOS DEMAS USUARIOS
         if (nuevoUsuario.getRoles().contains("admin") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
         }
         if (nuevoUsuario.getRoles().contains("admin") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO ADMINISTRADOR"), HttpStatus.BAD_REQUEST);
         }
-        if (nuevoUsuario.getRoles().contains("decano")) {
+        if (nuevoUsuario.getRoles().contains("decano") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
+        }
+        if (nuevoUsuario.getRoles().contains("decano") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO DECANO"), HttpStatus.BAD_REQUEST);
+        }
+        if (nuevoUsuario.getRoles().contains("profesor") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_PROFESOR).get());
+        }
+        if (nuevoUsuario.getRoles().contains("profesor") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO PROFESOR"), HttpStatus.BAD_REQUEST);
+        }
+        if (nuevoUsuario.getRoles().contains("trabajador") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_TRABAJADOR).get());
+        }
+        if (nuevoUsuario.getRoles().contains("trabajador") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO TRABAJADOR"), HttpStatus.BAD_REQUEST);
         }
         if (nuevoUsuario.isEstudiante() || nuevoUsuario.getRoles().contains("estudiante")) {
             estudiante = true;
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ESTUDIANTE).get());
 
-        }
-        if (nuevoUsuario.getRoles().contains("profesor")) {
-            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_PROFESOR).get());
-        }
-        if (nuevoUsuario.getRoles().contains("trabajador")) {
-            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_TRABAJADOR).get());
         }
 
 // si todo esta bien creamos el usuario
@@ -135,16 +144,36 @@ public class UsuarioController {
         Set<RolSistema> roles = new HashSet<>();
 
         roles.add(rolSistemaService.getByRol(RolNombre.ROLE_USER).get());
-
-        // si el usuario creado posee el rol admin en el jason lo creamos asi
+        boolean estudiante = false;
+        // VERIFICAMOS QUE SOLO SE PUEDAN CREAR ESTUDIANTES LIBREMENTE Y LOS ADMINISTRADORES SON LOS QUE CREAN LOS DEMAS USUARIOS
         if (nuevoUsuario.getRoles().contains("admin") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ADMIN).get());
         }
         if (nuevoUsuario.getRoles().contains("admin") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO ADMINISTRADOR"), HttpStatus.BAD_REQUEST);
         }
-        if (nuevoUsuario.getRoles().contains("decano")) {
+        if (nuevoUsuario.getRoles().contains("decano") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
             roles.add(rolSistemaService.getByRol(RolNombre.ROLE_DECANO).get());
+        }
+        if (nuevoUsuario.getRoles().contains("decano") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO DECANO"), HttpStatus.BAD_REQUEST);
+        }
+        if (nuevoUsuario.getRoles().contains("profesor") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_PROFESOR).get());
+        }
+        if (nuevoUsuario.getRoles().contains("profesor") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO PROFESOR"), HttpStatus.BAD_REQUEST);
+        }
+        if (nuevoUsuario.getRoles().contains("trabajador") && sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_TRABAJADOR).get());
+        }
+        if (nuevoUsuario.getRoles().contains("trabajador") && !sesionDetails.getPrivilegios().contains("ROLE_ADMIN")) {
+            return new ResponseEntity(new Mensaje("USTED NO POSEE PRIVILEGIOS PARA CREAR UN USUARIO TRABAJADOR"), HttpStatus.BAD_REQUEST);
+        }
+        if (nuevoUsuario.isEstudiante() || nuevoUsuario.getRoles().contains("estudiante")) {
+            estudiante = true;
+            roles.add(rolSistemaService.getByRol(RolNombre.ROLE_ESTUDIANTE).get());
+
         }
         usuario.setRolsistemaList(roles);
         usuarioService.save(usuario);
