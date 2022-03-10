@@ -1,6 +1,7 @@
 package com.pid.proyecto.seguridad.jwt;
 
 import com.pid.proyecto.seguridad.auxiliares.UsuarioPrincipal;
+import com.pid.proyecto.seguridad.dto.NuevoUsuario;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -42,10 +44,13 @@ public class JwtProvider {
         //convertimos las autoridades en cadenas String 
         List<String> roles = usuarioPrincipal.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        
+        NuevoUsuario usuario = new NuevoUsuario(usuarioPrincipal.getNombre(), usuarioPrincipal.getApellidos(), usuarioPrincipal.getUsername(), null, usuarioPrincipal.isProfesor(), new HashSet<>(roles));
 
         //construir el token
         return Jwts.builder() // estamos construyendo el token con lo siguiente
                 .setSubject(usuarioPrincipal.getUsername()) // le pasamos el nombre de usuario
+                .claim("user", usuario)
                 .claim("roles", roles)
                 .setIssuedAt(new Date()) // le pasamos la fecha de creacion
                 .setExpiration(new Date(new Date().getTime() + expiration * 1000)) // le decimos el tiempo de expiracion
