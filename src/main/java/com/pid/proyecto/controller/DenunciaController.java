@@ -64,7 +64,7 @@ public class DenunciaController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new Mensaje("CAMPOS MAL PUESTOS"), HttpStatus.BAD_REQUEST);
         }
-        
+
         // obtenemos el denunciante que se encuentra ahora en sesion
         String denunciante = sesionDetails.getUsuario();
 
@@ -95,6 +95,10 @@ public class DenunciaController {
 
         // añadimos la lista de estudiantes a nuestra variable que ya tiene el denunciante
         LU.addAll(convertidor.convertirListaStringToListaUsuario(nuevaDenuncia.getEstudiantes()));
+
+        if (!LU.isEmpty()) {
+            return new ResponseEntity(new Mensaje(sesionDetails.getUsuario()), HttpStatus.CONFLICT);
+        }
 
         // añadimos la lista con todas nuestras relaciones a la denuncia que se está creando
         denuncia.setUsuarioList(LU);

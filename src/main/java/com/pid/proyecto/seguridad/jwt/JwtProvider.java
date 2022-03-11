@@ -49,9 +49,9 @@ public class JwtProvider {
 
         //construir el token
         return Jwts.builder() // estamos construyendo el token con lo siguiente
-                .setSubject(usuarioPrincipal.getUsername()) // le pasamos el nombre de usuario
+              .setSubject(usuarioPrincipal.getUsername()) // le pasamos el nombre de usuario
                 .claim("user", usuario)
-                .claim("roles", roles)
+//                .claim("roles", roles)
                 .setIssuedAt(new Date()) // le pasamos la fecha de creacion
                 .setExpiration(new Date(new Date().getTime() + expiration * 1000)) // le decimos el tiempo de expiracion
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes()) // firmamos el token con el secret
@@ -60,7 +60,7 @@ public class JwtProvider {
 
     // obtener el nombre de usuario en base a un token
     public String getNombreUsuarioFromToken(String token) {
-        return Jwts.parser()
+        return (String) Jwts.parser()
                 .setSigningKey(secret.getBytes()) // firmamos con secret
                 .parseClaimsJws(token) // obtenemos el token
                 .getBody() // el cuerpo del token
