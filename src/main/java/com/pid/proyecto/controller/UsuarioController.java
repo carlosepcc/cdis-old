@@ -7,6 +7,7 @@ import com.pid.proyecto.seguridad.dto.NuevoUsuario;
 import com.pid.proyecto.entity.RolSistema;
 import com.pid.proyecto.entity.Usuario;
 import com.pid.proyecto.seguridad.auxiliares.SesionDetails;
+import com.pid.proyecto.seguridad.dto.NuevoDelete;
 import com.pid.proyecto.seguridad.enums.RolNombre;
 import com.pid.proyecto.seguridad.jwt.JwtProvider;
 import com.pid.proyecto.service.RolSistemaService;
@@ -180,17 +181,17 @@ public class UsuarioController {
         return new ResponseEntity(new Mensaje("USUARIO ACTUALIZADO"), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{ids}")
+    @DeleteMapping("/Delete")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> borrar(@PathVariable("ids") List<Integer> ids) {
+    public ResponseEntity<?> borrar(@Valid @RequestBody NuevoDelete nuevoDelete) {
 
-        for (int i = 0; i < ids.size(); i++) {
-            if (!usuarioService.existsById(ids.get(i))) {
+        for (int i: nuevoDelete.getListaId()) {
+            if (!usuarioService.existsById(i)) {
                 return new ResponseEntity(new Mensaje("NO EXISTE ALGUNO DE LOS ID ESPECIFICADOS"), HttpStatus.NOT_FOUND);
             }
         }
-        for (int i = 0; i < ids.size(); i++) {
-            usuarioService.delete(ids.get(i));
+        for (int i: nuevoDelete.getListaId()) {
+            usuarioService.delete(i);
         }
 
         return new ResponseEntity(new Mensaje("USUARIOS BORRADOS"), HttpStatus.OK);
