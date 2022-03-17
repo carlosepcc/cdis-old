@@ -31,7 +31,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String token = getToken(req);
+            String token = req.getHeader("Authorization");
             //comprobamos q el token existe y que es valido
             if (token != null && jwtProvider.validateToken(token)) {
                 //obtenemos el usuario a partir de ese token
