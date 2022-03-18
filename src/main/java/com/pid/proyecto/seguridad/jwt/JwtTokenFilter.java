@@ -31,7 +31,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String token = getToken(req);
+            String token = req.getHeader("Authorization");
             //comprobamos q el token existe y que es valido
             if (token != null && jwtProvider.validateToken(token)) {
                 //obtenemos el usuario a partir de ese token
@@ -54,16 +54,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(req, res);
 
-    }
-
-    //hacemos al token sin la cabecera
-    private String getToken(HttpServletRequest request) {
-
-        String header = request.getHeader("Authorization");
-        if (header != null && header.startsWith("Bearer")) {
-            return header.replace("Bearer ", ""); // reemplazamos la cadena de la cabecera por una cadena vacia
-        }
-        return null;
     }
 
 }
