@@ -56,4 +56,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     }
 
+    //hacemos al token sin la cabecera
+    private String getToken(HttpServletRequest request) {
+
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer")) {
+            return header.replace("Bearer ", ""); // reemplazamos la cadena de la cabecera por una cadena vacia
+        }
+        return header;
+    }
+
 }
